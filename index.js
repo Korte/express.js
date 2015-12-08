@@ -20,11 +20,18 @@ app.get('/', function (req, res) {
     var buffer = ''
 
     users.forEach(function(user){
-        buffer += user.name.full + '<br>'
+        buffer += '<a href=' + user.username + '>' + user.name.full + '</a> <br>'
     })
 
     res.send(buffer)
 })
+
+app.get('/:username', function(req, res) {
+    var username = req.params.username
+
+    res.send(username)
+})
+
 
 
 var server =  app.listen(3000, function(){
