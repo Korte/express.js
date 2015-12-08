@@ -15,7 +15,6 @@ fs.readFile('users.json', {encoding: 'utf8'}, function(err, data) {
     })
 })
 
-
 app.get('/', function (req, res) {
     var buffer = ''
 
@@ -26,13 +25,21 @@ app.get('/', function (req, res) {
     res.send(buffer)
 })
 
+app.get(/big.*/, function (req, res, next){
+    console.log('BIG USER ACCESS')
+    next()
+})
+
+app.get(/.*dog.*/, function(req, res, next) {
+    console.log('USER GOES WOOF')
+    next()
+})
+
 app.get('/:username', function(req, res) {
     var username = req.params.username
 
     res.send(username)
 })
-
-
 
 var server =  app.listen(3000, function(){
 
