@@ -17,7 +17,13 @@ fs.readFile('users.json', {encoding: 'utf8'}, function(err, data) {
 
 
 app.get('/', function (req, res) {
-    res.send(JSON.stringify(users, null, 2))
+    var buffer = ''
+
+    users.forEach(function(user){
+        buffer += user.name.full + '<br>'
+    })
+
+    res.send(buffer)
 })
 
 
