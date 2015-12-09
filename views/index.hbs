@@ -3,13 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <title>User Index</title>
+    <style media="screen">
+        * {
+            font-family: Helvetica, Arial, sans-serif;
+        }
+
+        div {
+            display: flex;
+            align-items: center;
+            padding: 1em;
+            font-size: 1.2em;
+        }
+
+        div a {
+            padding-left: 0.5em;
+        }
+    </style>
 </head>
 <body>
     <h1>Handlebars</h1>
     {{#each users as |user|}}
-    <img src="{{user.username}}_sm.jpg" alt="{{user.name.full}}" />
-    <div><a href="/{{user.username}}">{{user.name.full}}</a></div>
+    <div>
+        <img src="{{user.username}}_sm.jpg" alt="{{user.name.full}}" />
+        <a href="/{{user.username}}">{{user.name.full}}</a>
+    </div>
     {{/each}}
-
 </body>
 </html>
