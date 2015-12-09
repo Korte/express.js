@@ -1,3 +1,5 @@
+'use strict';
+
 var express = require('express')
 var app = express()
 
@@ -15,14 +17,11 @@ fs.readFile('users.json', {encoding: 'utf8'}, function(err, data) {
     })
 })
 
+app.set('views', './views')
+app.set('view engine', 'jade')
+
 app.get('/', function (req, res) {
-    var buffer = ''
-
-    users.forEach(function(user){
-        buffer += '<a href=' + user.username + '>' + user.name.full + '</a> <br>'
-    })
-
-    res.send(buffer)
+    res.render('index', {users: users})
 })
 
 app.get(/big.*/, function (req, res, next){
@@ -43,5 +42,5 @@ app.get('/:username', function(req, res) {
 
 var server =  app.listen(3000, function(){
 
-    console.log("sServer running at http://localhost:" + server.address().port)
+    console.log("Server running at http://localhost:" + server.address().port)
 })
