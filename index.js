@@ -20,6 +20,8 @@ fs.readFile('users.json', {encoding: 'utf8'}, function(err, data) {
 
 app.engine('hbs', engines.handlebars)
 
+app.use(express.static('./images'))
+
 app.set('views', './views')
 app.set('view engine', 'hbs')
 
