@@ -21,12 +21,9 @@
     </style>
 </head>
 <body>
-    <h1>Handlebars</h1>
-    {{#each users as |user|}}
+    <h1>{{username}}</h1>
     <div>
-        <img src="/profilepics/{{user.username}}_sm.jpg" alt="{{user.name.full}}" />
-        <a href="/{{user.username}}">{{user.name.full}}</a>
+        <img src="/profilepics/{{username}}_lg.jpg" alt="{{username}}" />
     </div>
-    {{/each}}
 </body>
 </html>

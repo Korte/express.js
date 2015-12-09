@@ -20,7 +20,7 @@ fs.readFile('users.json', {encoding: 'utf8'}, function(err, data) {
 
 app.engine('hbs', engines.handlebars)
 
-app.use(express.static('./images'))
+app.use('/profilepics', express.static('./images'))
 
 app.set('views', './views')
 app.set('view engine', 'hbs')
@@ -41,8 +41,7 @@ app.get(/.*dog.*/, function(req, res, next) {
 
 app.get('/:username', function(req, res) {
     var username = req.params.username
-
-    res.send(username)
+    res.render('user', {username: username})
 })
 
 var server =  app.listen(3000, function(){
