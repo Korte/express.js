@@ -56,9 +56,8 @@ function verifyUser (req, res, next) {
     fs.exists(fp, function (yes) {
         if(yes) {
             next()
-        }
-        else {
-            next('route')
+        } else {
+            res.redirect('/error/' + req.params.username)
         }
     })
 }
@@ -72,8 +71,8 @@ app.get('/:username', verifyUser, function(req, res) {
     })
 })
 
-app.get('/:foo', function (req, res) {
-  res.send('WHOOPS')
+app.get('/error/:username', function (req, res) {
+  res.status(404).send('No user named ' + req.params.username + ' found!')
 })
 
 app.put('/:username', function (req, res) {
