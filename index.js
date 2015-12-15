@@ -9,16 +9,7 @@ var _ = require('lodash')
 var engines = require('consolidate')
 var bodyParser = require('body-parser')
 
-var users = []
 
-fs.readFile('users.json', {encoding: 'utf8'}, function(err, data) {
-    if (err) throw err;
-
-    JSON.parse(data).forEach(function (user) {
-        user.name.full =  _.startCase(user.name.first + ' ' + user.name.last)
-        users.push(user)
-    })
-})
 
 function getUserFilePath (username) {
   return path.join(__dirname, 'users', username) + '.json'
@@ -48,8 +39,18 @@ app.set('views', './views')
 app.set('view engine', 'hbs')
 
 app.get('/', function (req, res) {
-    res.render('index', {users: users})
-})
+    var users = []
+    fs.readdir('users', function (err, files) {
+        files.forEach(function (file) {
+          fs.readFile(path.join(__dirname, 'users', file), {encoding: 'utf8'}, function (err, data) {
+            var user = JSON.parse(data)
+            user.name.full = _.startCase(user.name.first + ' ' + user.name.last)
+            users.push(user)
+            if (users.length === files.length) res.render('index', {users: users})
+          })
+        })
+      })
+ })
 
 app.get(/big.*/, function (req, res, next){
     console.log('BIG USER ACCESS')
@@ -79,6 +80,11 @@ app.put('/:username', function (req, res) {
     res.end();
 })
 
+app.delete('/:username', function (req, res) {
+  var fp = getUserFilePath(req.params.username)
+  fs.unlinkSync(fp) // delete the file
+  res.sendStatus(200)
+})
 
 var server =  app.listen(3000, function(){
 

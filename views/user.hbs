@@ -115,6 +115,15 @@
           })
         }
 
+    function del () {
+      $.ajax('/{{user.username}}', {
+        method: 'DELETE',
+        complete: function () {
+          location = '/'
+        }
+      })
+    }
+
   </script>
 
 </body>
