@@ -72,6 +72,11 @@ app.get('/data/:username', function(req, res) {
   res.json(user)
 })
 
+app.all('/:username', function (req, res, next) {
+    console.log(req.method, 'for', req.params.username )
+    next()
+})
+
 app.get('/:username', verifyUser, function(req, res) {
     var username = req.params.username
     var user = getUser(username)
