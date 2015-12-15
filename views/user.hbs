@@ -90,15 +90,31 @@
   <script  src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
   <script type="text/javascript">
       function edit () {
-        $('.edit').show();
-        $('.view').hide();
+          $('.edit').show();
+          $('.view').hide();
       }
 
       function cancel () {
           $('.edit').hide();
           $('.view').show();
       }
-  
+
+      function save () {
+          $.ajax('/{{user.username}}', {
+              method: 'PUT',
+              data: {
+                  street: $('#street').val(),
+                  city: $('#city').val(),
+                  state: $('#state').val(),
+                  zip: $('#zip').val()
+              },
+              complete: function () {
+                  cancel()
+                  location.reload()
+              }
+          })
+        }
+
   </script>
 
 </body>

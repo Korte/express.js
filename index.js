@@ -7,6 +7,7 @@ var fs = require('fs')
 var path = require('path')
 var _ = require('lodash')
 var engines = require('consolidate')
+var bodyParser = require('body-parser')
 
 var users = []
 
@@ -41,6 +42,7 @@ function saveUser (username, data) {
 app.engine('hbs', engines.handlebars)
 
 app.use('/profilepics', express.static('./images'))
+app.use(bodyParser.urlencoded({extended: true }))
 
 app.set('views', './views')
 app.set('view engine', 'hbs')
@@ -68,6 +70,15 @@ app.get('/:username', function(req, res) {
         address: user.location
     })
 })
+
+app.put('/:username', function (req, res) {
+    var username = req.params.username;
+    var user = getUser(username);
+    user.location = req.body;
+    saveUser(username, user)
+    res.end();
+})
+
 
 var server =  app.listen(3000, function(){
 
