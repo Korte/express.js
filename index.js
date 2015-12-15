@@ -50,13 +50,30 @@ app.get('/', function (req, res) {
       })
  })
 
-app.get('/:username', function(req, res) {
+function verifyUser (req, res, next) {
+    var fp = getUserFilePath(req.params.username)
+
+    fs.exists(fp, function (yes) {
+        if(yes) {
+            next()
+        }
+        else {
+            next('route')
+        }
+    })
+}
+
+app.get('/:username', verifyUser, function(req, res) {
     var username = req.params.username
     var user = getUser(username)
     res.render('user', {
         user:user,
         address: user.location
     })
+})
+
+app.get('/:foo', function (req, res) {
+  res.send('WHOOPS')
 })
 
 app.put('/:username', function (req, res) {
