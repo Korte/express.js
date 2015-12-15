@@ -62,6 +62,11 @@ function verifyUser (req, res, next) {
     })
 }
 
+app.get('*.json', function (req, res) {
+  res.download('./users/' + req.path)
+})
+
+
 app.get('/:username', verifyUser, function(req, res) {
     var username = req.params.username
     var user = getUser(username)
