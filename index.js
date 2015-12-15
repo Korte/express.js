@@ -66,6 +66,11 @@ app.get('*.json', function (req, res) {
   res.download('./users/' + req.path)
 })
 
+app.get('/data/:username', function(req, res) {
+  var username = req.params.username
+  var user = getUser(username)
+  res.json(user)
+})
 
 app.get('/:username', verifyUser, function(req, res) {
     var username = req.params.username
