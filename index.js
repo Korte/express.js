@@ -4,6 +4,7 @@ var express = require('express')
 var app = express()
 
 var fs = require('fs')
+var path = require('path')
 var _ = require('lodash')
 var engines = require('consolidate')
 
@@ -17,6 +18,25 @@ fs.readFile('users.json', {encoding: 'utf8'}, function(err, data) {
         users.push(user)
     })
 })
+
+function getUserFilePath (username) {
+  return path.join(__dirname, 'users', username) + '.json'
+}
+
+function getUser (username) {
+  var user = JSON.parse(fs.readFileSync(getUserFilePath(username), {encoding: 'utf8'}))
+  user.name.full = _.startCase(user.name.first + ' ' + user.name.last)
+  _.keys(user.location).forEach(function (key) {
+    user.location[key] = _.startCase(user.location[key])
+  })
+  return user
+}
+
+function saveUser (username, data) {
+  var fp = getUserFilePath(username)
+  fs.unlinkSync(fp) // delete the file
+  fs.writeFileSync(fp, JSON.stringify(data, null, 2), {encoding: 'utf8'})
+}
 
 app.engine('hbs', engines.handlebars)
 
@@ -41,7 +61,12 @@ app.get(/.*dog.*/, function(req, res, next) {
 
 app.get('/:username', function(req, res) {
     var username = req.params.username
-    res.render('user', {username: username})
+    var user = getUser(username)
+
+    res.render('user', {
+        user:user,
+        address: user.location
+    })
 })
 
 var server =  app.listen(3000, function(){
