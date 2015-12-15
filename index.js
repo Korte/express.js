@@ -9,8 +9,6 @@ var _ = require('lodash')
 var engines = require('consolidate')
 var bodyParser = require('body-parser')
 
-
-
 function getUserFilePath (username) {
   return path.join(__dirname, 'users', username) + '.json'
 }
@@ -52,20 +50,9 @@ app.get('/', function (req, res) {
       })
  })
 
-app.get(/big.*/, function (req, res, next){
-    console.log('BIG USER ACCESS')
-    next()
-})
-
-app.get(/.*dog.*/, function(req, res, next) {
-    console.log('USER GOES WOOF')
-    next()
-})
-
 app.get('/:username', function(req, res) {
     var username = req.params.username
     var user = getUser(username)
-
     res.render('user', {
         user:user,
         address: user.location
@@ -87,6 +74,5 @@ app.delete('/:username', function (req, res) {
 })
 
 var server =  app.listen(3000, function(){
-
     console.log("Server running at http://localhost:" + server.address().port)
 })
