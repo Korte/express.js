@@ -9,6 +9,8 @@ var _ = require('lodash')
 var engines = require('consolidate')
 var bodyParser = require('body-parser')
 
+var JSONStream = require('JSONStream');
+
 function getUserFilePath (username) {
   return path.join(__dirname, 'users', username) + '.json'
 }
@@ -70,7 +72,19 @@ app.get('/data/:username', function(req, res) {
   var username = req.params.username;
   var readable = fs.createReadStream('./users/' + username + '.json');
   readable.pipe(res);
-  })
+})
+
+app.get('/data/by/:gender', function (req, res) {
+    var gender = req.params.gender;
+    var readable = fs.createReadStream('./users.json');
+
+    readable
+        .pipe(JSONStream.parse('*', function (user) {
+            if (user.gender === gender) return user.name;
+        }))
+        .pipe(JSONStream.stringify('[\n ', ',\n ', '\n]\n'))
+        .pipe(res);
+})
 
 app.all('/:username', function (req, res, next) {
     console.log(req.method, 'for', req.params.username )
