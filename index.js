@@ -67,10 +67,10 @@ app.get('*.json', function (req, res) {
 })
 
 app.get('/data/:username', function(req, res) {
-  var username = req.params.username
-  var user = getUser(username)
-  res.json(user)
-})
+  var username = req.params.username;
+  var readable = fs.createReadStream('./users/' + username + '.json');
+  readable.pipe(res);
+  })
 
 app.all('/:username', function (req, res, next) {
     console.log(req.method, 'for', req.params.username )
